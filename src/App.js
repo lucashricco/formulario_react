@@ -1,11 +1,13 @@
 import React, {useState} from 'react';
 import ReactDOM from 'react-dom';
 import './App.css';
+import api from './services/api'
   
 function App() {
     const [name , setName] = useState('');
     const [email , setEmail] = useState('');
-    const [cep, setCep] = useState('');
+    const [dadosCep, setDadosCep] = useState('');
+    const [cep, setCep] = useState({});
     const [password , setPassword] = useState('');
     const [confPassword , setConfPassword] = useState('');
   
@@ -13,14 +15,23 @@ function App() {
     const handleChange =(e)=>{
       setName(e.target.value);
     }
-
+    
     const handleEmailChange =(e)=>{
       setEmail(e.target.value);
     }
+    
+    async function buscarCep(){
 
-    const handleCepChange =(e)=>{
-      setCep(e.target.value);
+      try{
+        const response = await api.get(`${dadosCep}/json`);
+        setCep(response.data)
+      }catch{
+        alert("Erro ao buscar o CEP! Digite novamente!")
+        setCep("")
+      }
+  
     }
+  
     const handlePasswordChange =(e)=>{
       setPassword(e.target.value);
     }
@@ -36,11 +47,12 @@ function App() {
       else if(password!=confPassword)
       {
         alert("As senhas estão diferentes!");
-      }      
-      else{
+
+      }else{
         alert("Usuário cadastrado com sucesso!");
         setName('');
         setEmail('');
+        setDadosCep('');
         setCep('');
         setPassword('');
         setConfPassword('');
@@ -53,6 +65,7 @@ function App() {
     const handleReset=(e)=>{
       setName('');
       setEmail('');
+      setDadosCep('');
       setCep('');
       setPassword('');
       setConfPassword('');
@@ -61,6 +74,7 @@ function App() {
     const handleCancel=(e)=>{
       window.location.replace('https://google.com');
     }
+
   return (
     <div className="App">
       <header className="App-header">
@@ -85,8 +99,19 @@ function App() {
 
         <div className="form-content">               
           <label>CEP*: </label>
-          <input type="text" value={cep} required maxLength={8} placeholder="Digite seu CEP, apenas os números" onChange={(e)   => {handleCepChange(e)}} />
+          <input type="text" value={dadosCep} required maxLength={8} placeholder="Digite seu CEP, apenas os números" 
+          onChange={(e) => setDadosCep(e.target.value)} 
+          onBlur={buscarCep}
+          />
         </div>
+        <div className="form-cidade">               
+          <label>Cidade: </label>
+          <input type="text" value={cep.localidade} required disabled />
+        
+          <label >UF: </label>
+          <input className="input-uf" value={cep.uf} type="text" required disabled />
+        </div>
+
 
         <div className="form-content">
           <label>Senha*: </label>
@@ -106,8 +131,11 @@ function App() {
     </div>
 
       </header>
+
+
     </div>
   );
 }
   
 export default App;
+

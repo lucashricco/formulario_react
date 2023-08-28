@@ -72,3 +72,28 @@
   cursor: pointer;
   margin-top: 14px;
 }
+
+/*estilo dos campos cidade e uf*/
+.form-cidade{
+  display: flex;
+  justify-content: center;
+  margin-bottom: 8px;
+  padding-bottom: 18px;
+}
+
+.form-cidade label{
+  font-size: 23px;
+
+}
+
+.form-cidade input{
+  border: 2px solid #dfdfdf;
+  border-radius: 8px;
+  padding: 8px;
+  margin-right: 10px;
+  width: 90%;
+}
+
+.form-cidade > .input-uf{
+  width: 10%;
+}
