@@ -10,37 +10,25 @@ function App() {
     const [cep, setCep] = useState({});
     const [password , setPassword] = useState('');
     const [confPassword , setConfPassword] = useState('');
-  
-
-    const handleChange =(e)=>{
-      setName(e.target.value);
-    }
     
-    const handleEmailChange =(e)=>{
-      setEmail(e.target.value);
-    }
-    
-    async function buscarCep(){
+    async function buscarCep(){ 
+          try{
+            const response = await api.get(`${dadosCep}/json`);
+            setCep(response.data)
+          }catch{
+            alert("Erro ao buscar CEP");
+            setDadosCep('');
+            
+            
+          }
+ 
 
-      try{
-        const response = await api.get(`${dadosCep}/json`);
-        setCep(response.data)
-      }catch{
-        alert("Erro ao buscar o CEP! Digite novamente!")
-        setCep("")
-      }
   
-    }
-  
-    const handlePasswordChange =(e)=>{
-      setPassword(e.target.value);
-    }
-
-    const handleConfPasswordChange =(e)=>{
-      setConfPassword(e.target.value);
     }
 
     const handleSubmit=(e)=>{
+
+      e.preventDefault();
       if(password.length < 6){
         alert("A senha deve ter no minimo 6 caracteres!")
       }
@@ -58,7 +46,7 @@ function App() {
         setConfPassword('');
         
       }
-      e.preventDefault();
+
   
     }
 
@@ -89,17 +77,17 @@ function App() {
 
         <div className="form-content">
           <label>Nome*: </label>
-          <input type="text" value={name} required placeholder="Digite seu nome" onChange={(e)  => {handleChange(e)}} />
+          <input type="text" value={name} required placeholder="Digite seu nome" onChange={(e)  => setName(e.target.value)} />
         </div>
 
         <div className="form-content">               
           <label>Email*: </label>
-          <input type="email" value={email} required placeholder="Digite seu email" onChange={(e)   => {handleEmailChange(e)}} />
+          <input type="email" value={email} required placeholder="Digite seu email" onChange={(e)   => setEmail(e.target.value)} />
         </div>
 
         <div className="form-content">               
           <label>CEP*: </label>
-          <input type="text" value={dadosCep} required maxLength={8} placeholder="Digite seu CEP, apenas os números" 
+          <input type="text" value={dadosCep} required maxLength={9} placeholder="Digite seu CEP" 
           onChange={(e) => setDadosCep(e.target.value)} 
           onBlur={buscarCep}
           />
@@ -109,18 +97,20 @@ function App() {
           <input type="text" value={cep.localidade} required disabled />
         
           <label >UF: </label>
-          <input className="input-uf" value={cep.uf} type="text" required disabled />
+          <input className="input-uf" value={cep.uf} type="text" required  disabled />
         </div>
 
 
         <div className="form-content">
           <label>Senha*: </label>
-          <input type="password" value={password} required placeholder="Crie uma senha com pelo menos 6 caracteres" onChange={(e)  => {handlePasswordChange(e)}} />
+          <input type="password" value={password} required placeholder="Crie uma senha com pelo menos 6 caracteres" 
+          onChange={(e)  => setPassword(e.target.value)} />
         </div>
 
         <div className="form-content">
           <label>Confirmar Senha*: </label>
-          <input type="password" value={confPassword} required placeholder="Digite novamente a senha criada" onChange={(e)  => {handleConfPasswordChange(e)}} />
+          <input type="password" value={confPassword} required placeholder="Digite novamente a senha criada" 
+          onChange={(e)  => setConfPassword(e.target.value)} />
         </div>
 
        <button type="submit">Cadastrar <i class="bi bi-check-square-fill"></i></button>
