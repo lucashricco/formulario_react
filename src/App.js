@@ -7,25 +7,10 @@ function App() {
     const [name , setName] = useState('');
     const [email , setEmail] = useState('');
     const [dadosCep, setDadosCep] = useState('');
-    const [cep, setCep] = useState({});
+    const [cep, setCep] = useState('');
     const [password , setPassword] = useState('');
     const [confPassword , setConfPassword] = useState('');
     
-    async function buscarCep(){ 
-          try{
-            const response = await api.get(`${dadosCep}/json`);
-            setCep(response.data)
-          }catch{
-            alert("Erro ao buscar CEP");
-            setDadosCep('');
-            
-            
-          }
- 
-
-  
-    }
-
     const handleSubmit=(e)=>{
 
       e.preventDefault();
@@ -46,7 +31,6 @@ function App() {
         setConfPassword('');
         
       }
-
   
     }
 
@@ -61,6 +45,19 @@ function App() {
 
     const handleCancel=(e)=>{
       window.location.replace('https://google.com');
+    }
+
+    async function buscarCep(){ 
+
+      try{
+        const response = await api.get(`${dadosCep}/json`);
+        setCep(response.data)
+      }catch{
+        alert("Erro ao buscar CEP");
+        setDadosCep('');
+        setCep('');
+        
+      }
     }
 
   return (
@@ -94,10 +91,10 @@ function App() {
         </div>
         <div className="form-cidade">               
           <label>Cidade: </label>
-          <input type="text" value={cep.localidade} required disabled />
+          <input type="text" value={cep.localidade}  required disabled />
         
           <label >UF: </label>
-          <input className="input-uf" value={cep.uf} type="text" required  disabled />
+          <input className="input-uf" value={cep.uf}  type="text" required  disabled />
         </div>
 
 
